@@ -11,6 +11,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Jeian Jasper O. | Frontend Developer",
   description: "Personal portfolio of Jeian Jasper O., Frontend Developer",
+  icons: {
+    icon: '/assets/jeianjazfavicon.png',
+    apple: '/assets/jeianjazfavicon.png',
+  },
 };
 
 export default function RootLayout({
