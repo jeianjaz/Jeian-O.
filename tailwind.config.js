@@ -10,6 +10,29 @@ module.exports = {
       fontFamily: {
         poppins: ['var(--font-poppins)', 'sans-serif'],
       },
+      animation: {
+        shimmer: 'shimmer 2s linear infinite',
+        'meteor': 'meteor 5s linear infinite',
+        'meteor-reverse': 'meteor-reverse 5s linear infinite',
+      },
+      keyframes: {
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        meteor: {
+          '0%': { transform: 'translateX(-100%)', opacity: 0 },
+          '10%': { opacity: 1 },
+          '90%': { opacity: 1 },
+          '100%': { transform: 'translateX(100%)', opacity: 0 },
+        },
+        'meteor-reverse': {
+          '0%': { transform: 'translateX(100%)', opacity: 0 },
+          '10%': { opacity: 1 },
+          '90%': { opacity: 1 },
+          '100%': { transform: 'translateX(-100%)', opacity: 0 },
+        },
+      },
     },
   },
   plugins: [],

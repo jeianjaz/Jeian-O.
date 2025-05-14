@@ -1,34 +1,71 @@
 "use client";
 
 import { motion } from "framer-motion";
-import TextReveal from "@/components/ui/TextReveal";
-import SparkleButton from "@/components/ui/SparkleButton";
+import { Sparkles } from "@/components/ui/aceternity/sparkles";
+import { ShootingStarsBackground } from "@/components/ui/aceternity/shooting-stars-background";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="max-w-4xl"
-      >
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-          Jeian Jasper O.
-        </h1>
-        <h2 className="text-5xl md:text-6xl font-medium mb-10">
-          Frontend Developer
-        </h2>
-        <TextReveal 
-          text="Hey I'm Jeian! I'm a frontend developer passionate about creating beautiful and functional web experiences."
-          className="text-xl md:text-2xl max-w-2xl mx-auto mb-12"
-        />
-        <div className="mt-10">
-          <SparkleButton>
-            View My Work
-          </SparkleButton>
+    <section
+      id="hero"
+      className="min-h-screen flex items-center justify-center py-20 relative overflow-hidden gradient-bg-hero"
+    >
+      <ShootingStarsBackground quantity={20} />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-6"
+          >
+            <h1 className="text-6xl md:text-8xl font-bold mb-4 tracking-tight text-white">
+              <Sparkles 
+                className="inline-block" 
+                colors={["#7AD63D", "#9fe76a", "#5ca82f", "#ffffff"]}
+              >
+                Jeian
+              </Sparkles>
+            </h1>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <p className="text-xl md:text-3xl text-gray-300 mb-12">
+              Frontend Developer & UI Designer
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-wrap gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <motion.a
+              href="#contact"
+              className="bg-[#7AD63D] hover:bg-[#5ca82f] text-[#12111a] px-8 py-4 rounded-lg font-medium"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Contact Me
+            </motion.a>
+            
+            <motion.a
+              href="#works"
+              className="border border-[#7AD63D] text-[#7AD63D] hover:bg-[#7AD63D]/10 px-8 py-4 rounded-lg font-medium"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View My Work
+            </motion.a>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
