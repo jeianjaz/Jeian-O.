@@ -52,11 +52,11 @@ export default function SkillsRadar() {
         // Calculate exact angle for even distribution
         const angle = startAngle + angleStep * index + (angleStep / 2);
         
-        // Use consistent distance within section for better organization
-        // Add a small random offset for natural appearance
-        const baseDistance = (minDistance + maxDistance) / 2;
-        const randomOffset = (Math.random() * 30) - 15;
-        const distance = baseDistance + randomOffset;
+        // Calculate distance based on index for more organized placement
+        // This creates a more structured pattern with less randomness
+        const distanceRange = maxDistance - minDistance;
+        const distanceStep = distanceRange / (skills.length || 1);
+        const distance = minDistance + (distanceStep * index);
         
         return {
           ...skill,
@@ -76,10 +76,10 @@ export default function SkillsRadar() {
         { name: "React", icon: <IconBrandReact className="w-8 h-8 text-[#61DAFB]" />, category: "frontend" },
         { name: "Redux", icon: <IconBrandRedux className="w-8 h-8 text-[#764ABC]" />, category: "frontend" },
       ],
-      -40, // Start slightly further left for better balance
-      90, // End at right angle for better spacing
-      160, // Consistent distance
-      160  // Same as min for consistent placement
+      -30, // Start angle
+      80, // End angle
+      120, // Min distance
+      180  // Max distance - create more variation
     );
     
     // Framework skills (right section)
@@ -89,10 +89,10 @@ export default function SkillsRadar() {
         { name: "Vite", icon: <IconBrandVite className="w-8 h-8 text-[#646CFF]" />, category: "frontend" },
         { name: "Tailwind", icon: <IconBrandTailwind className="w-8 h-8 text-[#38B2AC]" />, category: "frontend" },
       ],
-      90, 
-      180, 
-      160, 
-      160
+      100, // Adjusted to avoid overlap
+      170, 
+      140, 
+      200 // Varied distances
     );
     
     // Backend skills (bottom section)
@@ -102,10 +102,10 @@ export default function SkillsRadar() {
         { name: "Supabase", icon: <IconBrandSupabase className="w-8 h-8 text-[#3ECF8E]" />, category: "backend" },
         { name: "Jest", icon: <IconTestPipe className="w-8 h-8 text-[#C21325]" />, category: "backend" },
       ],
-      180, 
-      270, 
+      190, // Adjusted to avoid overlap
+      260, 
       160, 
-      160
+      220 // Varied distances
     );
     
     // Tools & Design skills (left section)
@@ -115,10 +115,10 @@ export default function SkillsRadar() {
         { name: "GitHub", icon: <IconBrandGithub className="w-8 h-8 text-white" />, category: "tools" },
         { name: "Figma", icon: <IconBrandFigma className="w-8 h-8 text-[#F24E1E]" />, category: "design" },
       ],
-      270, 
-      -40, 
-      160, 
-      160
+      280, // Adjusted to avoid overlap
+      350, 
+      130, 
+      190 // Varied distances
     );
     
     setSkills([...frontendSkills, ...frameworkSkills, ...backendSkills, ...toolsSkills]);
@@ -135,16 +135,21 @@ export default function SkillsRadar() {
   
   // Highlight skills when the radar scanner passes over them
   useEffect(() => {
-    // Find skills within the radar beam (±15 degrees)
-    const highlightedSkills = skills.filter(skill => {
-      const angleDiff = Math.abs(skill.angle - radarAngle);
-      return angleDiff < 15 || angleDiff > 345;
-    });
-    
-    if (highlightedSkills.length > 0) {
-      setHighlightedSkill(highlightedSkills[0].name);
-    } else {
-      setHighlightedSkill(null);
+    try {
+      // Find skills within the radar beam (±15 degrees)
+      const highlightedSkills = skills.filter(skill => {
+        const angleDiff = Math.abs(skill.angle - radarAngle);
+        return angleDiff < 15 || angleDiff > 345;
+      });
+      
+      if (highlightedSkills.length > 0) {
+        setHighlightedSkill(highlightedSkills[0].name);
+      } else {
+        setHighlightedSkill(null);
+      }
+    } catch (error) {
+      console.error('Error in radar highlight effect:', error);
+      // Prevent unhandled promise rejection
     }
   }, [radarAngle, skills]);
   

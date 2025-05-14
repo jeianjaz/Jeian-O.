@@ -25,7 +25,7 @@ export default function Hero() {
                 className="inline-block" 
                 colors={["#7AD63D", "#9fe76a", "#5ca82f", "#ffffff"]}
               >
-                Jeian
+                Jeian Jasper O.
               </Sparkles>
             </h1>
           </motion.div>
@@ -36,7 +36,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <p className="text-xl md:text-3xl text-gray-300 mb-12">
-              Frontend Developer & UI Designer
+              Hey I'm Jeian, I'm a frontend developer with a strong passion for building web applications with great user experiences.
             </p>
           </motion.div>
           

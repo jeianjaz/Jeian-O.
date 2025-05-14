@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import React, { useRef, useState } from "react";
 
 export const CardContainer = ({
@@ -13,7 +13,8 @@ export const CardContainer = ({
   className?: string;
   containerClassName?: string;
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  // We don't need the isHovered state since we're using motion values directly
+  const setIsHovered = useState(false)[1]; // Keep only the setter function
   const ref = useRef<HTMLDivElement>(null);
   
   // Create motion values for rotation
@@ -50,7 +51,7 @@ export const CardContainer = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "flex items-center justify-center py-20",
+        "flex items-center justify-center",
         containerClassName
       )}
     >
@@ -111,7 +112,7 @@ export const CardItem = ({
   rotateX?: number | string;
   rotateY?: number | string;
   rotateZ?: number | string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) => {
   return (
     <Tag
