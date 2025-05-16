@@ -1,20 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { HeroHighlight } from "@/components/ui/aceternity/hero-highlight";
 import dynamic from "next/dynamic";
+import { ScrollReveal } from "@/components/ui/animations/scroll-reveal";
 
 // Import the shooting stars background with client-side only rendering
 const ShootingStarsBackground = dynamic(
   () => import("@/components/ui/aceternity/shooting-stars-background").then(mod => mod.ShootingStarsBackground),
   { ssr: false }
 );
-import { RotatingText } from "@/components/ui/reactbits/rotating-text";
-import { ScrollFloat } from "@/components/ui/reactbits/scroll-float";
 import { ClientSparkles } from "@/components/ui/aceternity/client-sparkles";
-import { LampEffect } from "@/components/ui/aceternity/lamp-effect";
 import { GlowingEffect } from "@/components/ui/aceternity/glowing-effect";
+import { AnimatedHeading, ScrollFloat } from "@/components/ui/animations/scroll-float";
+import { TextAnimator } from "@/components/ui/aceternity/text-animator";
 
 export default function About() {
   // Rotating text options for skills
@@ -30,25 +29,20 @@ export default function About() {
       />
       
       <div className="container mx-auto max-w-6xl z-10 px-4">
-        {/* Hero section */}
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-4xl md:text-6xl font-bold text-center text-white mb-20"
-        >
-          About Me
-        </motion.h1>
+        {/* Hero section with animated heading */}
+        <div className="mb-20">
+          <AnimatedHeading 
+            className="text-4xl md:text-6xl font-bold text-center text-white" 
+            tag="h1"
+            underline={true}
+          >
+            About Me
+          </AnimatedHeading>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Photo column with glowing effect */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, type: "spring" }}
-            viewport={{ once: true }}
-            className="relative"
-          >
+          <ScrollReveal direction="none" duration={0.8} className="relative">
             <GlowingEffect>
               <div className="relative aspect-square max-w-md mx-auto overflow-hidden rounded-2xl border border-white/10">
                 <Image
@@ -68,35 +62,31 @@ export default function About() {
                 />
               </div>
             </GlowingEffect>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Content column */}
           <div className="space-y-8">
             {/* Introduction with rotating text */}
             <div>
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="text-3xl md:text-4xl font-bold mb-4 text-white"
-              >
-                Hello, I'm Jeian
-              </motion.h2>
+              <ScrollFloat direction="up" distance={20} duration={0.6} className="mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-white">
+                  Hello, I&apos;m Jeian
+                </h2>
+              </ScrollFloat>
               
               <div className="flex items-center mb-6">
-                <span className="text-xl text-gray-300 mr-2">I'm a</span>
-                <RotatingText 
+                <TextAnimator 
                   words={skills} 
-                  className="text-xl font-semibold text-white"
-                  duration={2000}
+                  className="text-xl font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 inline-block text-transparent bg-clip-text"
+                  interval={3000}
                 />
               </div>
               
               <ScrollFloat
                 className="text-lg text-gray-300 leading-relaxed"
-                distance={10}
+                distance={20}
                 direction="up"
+                delay={0.2}
               >
                 <p>
                   A junior-year college student passionate about creating modern web experiences. 
@@ -130,20 +120,19 @@ export default function About() {
                 </ul>
               </HeroHighlight>
               
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
+              <ScrollFloat
+                direction="up"
+                distance={20}
+                delay={0.3}
                 className="mt-8"
               >
                 <h3 className="text-2xl font-semibold text-white mb-4">Personal Note</h3>
                 <p className="text-gray-300 italic border-l-2 border-white/20 pl-4">
-                  "I'm always exploring new technologies, especially AI-driven development and innovative tools 
-                  that enhance efficiency. When I'm not coding, I enjoy diving into design trends and working 
-                  on personal projects to sharpen my skills."
+                  &quot;I&apos;m always exploring new technologies, especially AI-driven development and innovative tools 
+                  that enhance efficiency. When I&apos;m not coding, I enjoy diving into design trends and working 
+                  on personal projects to sharpen my skills.&quot;
                 </p>
-              </motion.div>
+              </ScrollFloat>
             </div>
           </div>
         </div>

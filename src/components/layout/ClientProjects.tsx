@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/aceternity/3d-card";
+import { OGLParticles } from "@/components/ui/animations/ogl-particles";
 
 // Import the shooting stars background with client-side only rendering
 const ShootingStarsBackground = dynamic(
@@ -19,6 +20,7 @@ interface Project {
   tags: string[];
   link: string;
   github: string;
+  image?: string; // Optional image path
 }
 
 // Client-only Projects component
@@ -28,39 +30,52 @@ export default function ClientProjects() {
     {
       id: 1,
       title: "Space-Themed Portfolio",
-      description: "A modern, responsive portfolio website with a space theme, built with Next.js and Tailwind CSS.",
-      tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
-      link: "https://portfolio.example.com",
-      github: "https://github.com/username/portfolio",
+      description: "My personal portfolio website featuring a space theme with interactive particles, smooth animations, and responsive design.",
+      tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "OGL"],
+      link: "", // Currently in development
+      github: "", // Not yet on GitHub
+      image: "/assets/portfolio-preview.png" // Placeholder for now
     },
     {
       id: 2,
-      title: "E-Commerce Platform",
-      description: "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
-      tags: ["React", "Node.js", "MongoDB", "Stripe"],
-      link: "https://ecommerce.example.com",
-      github: "https://github.com/username/ecommerce",
+      title: "IriQ Smart Irrigation System",
+      description: "An IoT-based smart irrigation system that uses ESP32 microcontrollers, soil moisture sensors, and a cloud dashboard for automated plant watering.",
+      tags: ["IoT", "ESP32", "Next.js", "Supabase", "PostgreSQL"],
+      link: "https://github.com/jeianjaz/IriQ",
+      github: "https://github.com/jeianjaz/IriQ",
+      image: "/assets/SSIRIQ.png"
     },
     {
       id: 3,
-      title: "Task Management App",
-      description: "A collaborative task management application with real-time updates and team collaboration features.",
-      tags: ["Vue.js", "Firebase", "Tailwind CSS", "TypeScript"],
-      link: "https://tasks.example.com",
-      github: "https://github.com/username/task-manager",
+      title: "Pulse - Healthcare Platform",
+      description: "An AI-driven healthcare platform for remote patient monitoring and predictive health analysis with secure video consultations and interactive dashboards.",
+      tags: ["React", "AI", "Twilio", "Tailwind CSS", "TypeScript"],
+      link: "https://github.com/jeianjaz/Pulse",
+      github: "https://github.com/jeianjaz/Pulse",
+      image: "/assets/pulsess.png"
     },
     {
       id: 4,
-      title: "Weather Dashboard",
-      description: "A weather dashboard that displays current and forecasted weather data with interactive visualizations.",
-      tags: ["React", "D3.js", "API Integration", "CSS"],
-      link: "https://weather.example.com",
-      github: "https://github.com/username/weather-app",
+      title: "HealthCB - Community Health Portal",
+      description: "A comprehensive healthcare platform for Barangay Sta. Monica that streamlines medical services and connects patients with healthcare professionals.",
+      tags: ["Next.js", "React", "TailwindCSS", "DaisyUI", "Vercel"],
+      link: "https://health-care-nine-virid.vercel.app/",
+      github: "https://github.com/jeianjaz/HealthCB",
+      image: "/assets/healthcbss.png"
     },
   ];
 
   return (
     <section id="projects" className="py-20 px-4 relative min-h-screen">
+      {/* Particles background with mouse interaction and rotation disabled */}
+      <OGLParticles 
+        count={130}
+        color="#ffffff"
+        mouseInteraction={false}
+        rotation={false}
+        className="opacity-80"
+      />
+      
       {/* Space background with shooting stars */}
       <ShootingStarsBackground
         quantity={100}
@@ -105,9 +120,19 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <CardBody className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden h-full relative">
           {/* Project image */}
           <div className="relative h-48 w-full overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-0">
-              <span className="text-white/30 text-sm">Project Image</span>
-            </div>
+            {project.image ? (
+              <CardItem translateZ={20} className="h-full w-full">
+                <img 
+                  src={project.image} 
+                  alt={`${project.title} screenshot`}
+                  className="object-cover object-top w-full h-full transition-transform duration-500 group-hover:scale-105"
+                />
+              </CardItem>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-0">
+                <span className="text-white/30 text-sm">Project Image</span>
+              </div>
+            )}
           </div>
           
           {/* Project content */}

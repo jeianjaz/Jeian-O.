@@ -36,9 +36,15 @@ const ClientOnlyStars = ({
     }[]
   >([]);
 
+  // Pre-generate stars for faster initial render
+  const [initialized, setInitialized] = useState(false);
+  
+  // Generate stars immediately on component mount
   useEffect(() => {
-    // Generate fixed stars
-    const generatedStars = Array.from({ length: quantity * 10 }, (_, i) => ({
+    if (initialized) return;
+    
+    // Generate fixed stars - reduce quantity for better performance
+    const generatedStars = Array.from({ length: quantity * 5 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -47,32 +53,43 @@ const ClientOnlyStars = ({
     }));
     setStars(generatedStars);
 
-    // Generate shooting stars
+    // Generate shooting stars with optimized values
     const generateShootingStar = () => ({
       id: Math.random(),
       x: Math.random() * 100,
       y: Math.random() * 50,
-      length: Math.random() * 10 + 10,
+      length: Math.random() * 8 + 8, // Slightly smaller for better performance
       opacity: Math.random() * 0.8 + 0.2,
-      duration: Math.random() * 2 + 1,
-      delay: Math.random() * 5,
+      duration: Math.random() * 1.5 + 1, // Slightly faster for better performance
+      delay: Math.random() * 3, // Reduced delay for faster initial appearance
     });
 
-    const initialShootingStars = Array.from({ length: quantity }, () =>
+    // Generate initial shooting stars immediately
+    const initialShootingStars = Array.from({ length: Math.min(quantity, 8) }, () =>
       generateShootingStar()
     );
     setShootingStars(initialShootingStars);
-
-    // Periodically add new shooting stars
-    const interval = setInterval(() => {
-      setShootingStars((prev) => {
-        const newStar = generateShootingStar();
-        return [...prev.slice(-quantity + 1), newStar];
-      });
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [quantity, starSize]);
+    setInitialized(true);
+    
+    // Use requestAnimationFrame for smoother animations
+    let lastUpdate = 0;
+    let rafId: number;
+    
+    const updateStars = (timestamp: number) => {
+      // Only update every 2 seconds
+      if (timestamp - lastUpdate > 2000) {
+        setShootingStars((prev) => {
+          const newStar = generateShootingStar();
+          return [...prev.slice(-Math.min(quantity, 8) + 1), newStar];
+        });
+        lastUpdate = timestamp;
+      }
+      rafId = requestAnimationFrame(updateStars);
+    };
+    
+    rafId = requestAnimationFrame(updateStars);
+    return () => cancelAnimationFrame(rafId);
+  }, [quantity, starSize, initialized]);
 
   return (
     <div

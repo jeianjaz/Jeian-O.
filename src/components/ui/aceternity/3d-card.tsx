@@ -16,6 +16,7 @@ export const CardContainer = ({
   // We don't need the isHovered state since we're using motion values directly
   const setIsHovered = useState(false)[1]; // Keep only the setter function
   const ref = useRef<HTMLDivElement>(null);
+  const lastUpdateTime = useRef(0); // For throttling
   
   // Create motion values for rotation
   const rotateX = useMotionValue(0);
@@ -23,11 +24,22 @@ export const CardContainer = ({
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const x = (e.clientX - left) / width;
-    const y = (e.clientY - top) / height;
-    rotateX.set(y - 0.5);
-    rotateY.set(x - 0.5);
+    
+    // Throttle updates to reduce CPU usage (16ms = ~60fps)
+    const now = Date.now();
+    if (now - lastUpdateTime.current < 16) return;
+    lastUpdateTime.current = now;
+    
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const rotateXVal = mouseY / height - 0.5;
+    const rotateYVal = mouseX / width - 0.5;
+    
+    rotateX.set(rotateXVal);
+    rotateY.set(rotateYVal);
   };
 
   const handleMouseEnter = () => {
@@ -51,7 +63,7 @@ export const CardContainer = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "flex items-center justify-center",
+        "flex items-center justify-center hardware-accelerated",
         containerClassName
       )}
     >
