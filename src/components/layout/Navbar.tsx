@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { SeamlessNavbar } from "@/components/ui/aceternity/seamless-navbar";
-import { FloatingDock } from "@/components/ui/aceternity/floating-dock";
+
 import { IconUser, IconCode, IconBriefcase, IconMail, IconMenu2, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -79,12 +79,6 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-        
-        {/* Keep floating dock for quick access */}
-        <FloatingDock 
-          items={navItems} 
-          mobileClassName="shadow-xl border border-cyan-500/20 bg-black/80 backdrop-blur-md text-white" 
-        />
       </div>
     </header>
   );

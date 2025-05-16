@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState, memo } from "react";
 import dynamic from "next/dynamic";
 import { OGLParticles } from "@/components/ui/animations/ogl-particles";
-import { Asteroid } from "@/components/ui/animations/asteroid";
+
 import { 
   IconBrandHtml5, 
   IconBrandCss3, 
@@ -218,9 +218,6 @@ export default function SkillsCircle() {
       />
       
       <div className="container mx-auto max-w-6xl z-10 px-4 relative">
-        {/* Decorative asteroids - smaller size and adjusted position */}
-        <Asteroid position="top-left" size={40} className="opacity-60 top-20 left-20" />
-        <Asteroid position="bottom-right" size={35} className="opacity-60 bottom-20 right-20" />
         {/* Section heading */}
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
