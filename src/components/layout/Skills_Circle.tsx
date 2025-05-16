@@ -75,8 +75,8 @@ const SkillIcon = memo(({ skill, angle, radius }: { skill: Skill; angle: number;
         <div 
           className="rounded-full flex items-center justify-center overflow-hidden transition-all duration-300"
           style={{ 
-            width: 56,
-            height: 56,
+            width: isMobile ? 40 : 56,
+            height: isMobile ? 40 : 56,
             background: 'rgba(0, 0, 0, 0.7)',
             backdropFilter: 'blur(4px)',
             border: isHovered ? '2px solid rgba(255, 255, 255, 0.9)' : '1px solid rgba(255, 255, 255, 0.4)',
@@ -194,13 +194,13 @@ export default function SkillsCircle() {
   // Calculate orbit radii - responsive for different screen sizes
   const baseOrbitRadii = [160, 240, 320];
   
-  // Scale down orbit radii for mobile devices
+  // Scale down orbit radii for mobile devices even more aggressively
   const orbitRadii = isMobile 
-    ? baseOrbitRadii.map(radius => radius * 0.7) // 30% smaller on mobile
+    ? baseOrbitRadii.map(radius => radius * 0.4) // 60% smaller on mobile
     : baseOrbitRadii;
   
   return (
-    <section id="skills" className="relative min-h-screen w-full overflow-hidden py-20 flex items-center justify-center">
+    <div id="skills" className="relative min-h-screen w-full overflow-hidden py-20 flex items-center justify-center">
       {/* Particles background with mouse interaction and rotation enabled */}
       <OGLParticles 
         count={150}
@@ -223,30 +223,20 @@ export default function SkillsCircle() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-4xl md:text-6xl font-bold text-center text-white mb-20"
+          className="text-4xl md:text-6xl font-bold text-center text-white mb-10 md:mb-20"
         >
           My Skills
         </motion.h1>
         
         {/* Skills circle container */}
-        <div className="relative w-full aspect-square max-w-3xl mx-auto bg-transparent">
-          {/* Simple orbit circles */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            {orbitRadii.map((radius, index) => (
-              <div 
-                key={`orbit-${index}`}
-                className="absolute rounded-full"
-                style={{ 
-                  width: radius * 2, 
-                  height: radius * 2,
-                  border: '2px solid rgba(255, 255, 255, 0.5)',
-                }}
-              />
-            ))}
-            
-            {/* Simple white center circle */}
-            <div className="absolute w-6 h-6 rounded-full bg-white"></div>
-          </div>
+        <div className="relative flex items-center justify-center mb-8 md:mb-16 h-[400px] md:h-[600px]">
+          {/* Orbit circles */}
+          <div className="absolute border border-white/10 rounded-full" style={{ width: orbitRadii[0] * 2, height: orbitRadii[0] * 2 }} />
+          <div className="absolute border border-white/10 rounded-full" style={{ width: orbitRadii[1] * 2, height: orbitRadii[1] * 2 }} />
+          <div className="absolute border border-white/10 rounded-full" style={{ width: orbitRadii[2] * 2, height: orbitRadii[2] * 2 }} />
+          
+          {/* Simple white center circle */}
+          <div className="absolute w-4 h-4 md:w-6 md:h-6 rounded-full bg-white"></div>
           
           {/* Skills */}
           {skills.map((skill) => {
@@ -271,6 +261,6 @@ export default function SkillsCircle() {
           </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

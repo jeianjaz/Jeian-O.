@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/aceternity/3d-card";
 import { OGLParticles } from "@/components/ui/animations/ogl-particles";
@@ -122,16 +123,25 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <div className="relative h-48 w-full overflow-hidden">
             {project.image ? (
               <CardItem translateZ={20} className="h-full w-full">
-                <img 
+                <Image 
                   src={project.image} 
                   alt={`${project.title} screenshot`}
-                  className="object-cover object-top w-full h-full transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={index < 2} // Only prioritize first two images
+                  onError={() => {
+                    // This is just to handle the TypeScript error, Next.js Image handles fallbacks differently
+                    console.log('Image failed to load');
+                  }}
                 />
               </CardItem>
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-0">
-                <span className="text-white/30 text-sm">Project Image</span>
-              </div>
+              <CardItem translateZ={20} className="h-full w-full bg-gradient-to-br from-black/80 to-gray-800/80">
+                <div className="flex items-center justify-center h-full w-full">
+                  <span className="text-white/50 text-sm">Coming Soon</span>
+                </div>
+              </CardItem>
             )}
           </div>
           
