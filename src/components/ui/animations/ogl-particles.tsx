@@ -62,10 +62,11 @@ export function OGLParticles({
     const scene = new Transform();
 
     // Initialize mouse
+    let updateMouse: ((e: MouseEvent) => void) | null = null;
     if (mouseInteraction) {
       mouseRef.current = new Vec2();
       
-      const updateMouse = (e: MouseEvent) => {
+      updateMouse = (e: MouseEvent) => {
         if (!mouseRef.current) return;
         // Convert mouse position to normalized device coordinates (-1 to +1)
         mouseRef.current.set(
@@ -242,7 +243,7 @@ export function OGLParticles({
       
       window.removeEventListener('resize', resize);
       
-      if (mouseInteraction) {
+      if (mouseInteraction && updateMouse) {
         window.removeEventListener('mousemove', updateMouse);
       }
       
@@ -250,7 +251,14 @@ export function OGLParticles({
         gl.canvas.parentNode.removeChild(gl.canvas);
       }
       
-      renderer.dispose();
+      // Clean up renderer resources
+      try {
+        // In OGL, we don't need to explicitly dispose the renderer
+        // Just make sure we remove the canvas and clear references
+        rendererRef.current = null;
+      } catch (error) {
+        console.warn('Error cleaning up renderer:', error);
+      }
     };
   }, [count, color, mouseInteraction, rotation]);
 
