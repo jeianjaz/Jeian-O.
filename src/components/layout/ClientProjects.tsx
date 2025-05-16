@@ -32,9 +32,9 @@ export default function ClientProjects() {
       title: "Space-Themed Portfolio",
       description: "My personal portfolio website featuring a space theme with interactive particles, smooth animations, and responsive design.",
       tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "OGL"],
-      link: "", // Currently in development
-      github: "", // Not yet on GitHub
-      image: "/assets/portfolio-preview.png" // Placeholder for now
+      link: "https://jeian-o.vercel.app", // Updated with live site
+      github: "https://github.com/jeianjaz/Jeian-O.", // Updated with GitHub repo
+      image: "/assets/proftolioss.png" // Updated with actual portfolio screenshot
     },
     {
       id: 2,
