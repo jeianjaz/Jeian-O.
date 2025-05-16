@@ -33,8 +33,8 @@ const Contact = memo(function Contact() {
       />
       
       <div className="container mx-auto max-w-6xl relative z-10">
-        {/* Decorative asteroid */}
-        <Asteroid position="bottom-right" size={70} />
+        {/* Decorative asteroid - smaller size and adjusted position */}
+        <Asteroid position="bottom-right" size={40} className="opacity-60 bottom-20 right-20" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -188,9 +188,9 @@ export default function SkillsCircle() {
       />
       
       <div className="container mx-auto max-w-6xl z-10 px-4 relative">
-        {/* Decorative asteroids */}
-        <Asteroid position="top-left" size={90} />
-        <Asteroid position="bottom-right" size={80} />
+        {/* Decorative asteroids - smaller size and adjusted position */}
+        <Asteroid position="top-left" size={40} className="opacity-60 top-20 left-20" />
+        <Asteroid position="bottom-right" size={35} className="opacity-60 bottom-20 right-20" />
         {/* Section heading */}
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
