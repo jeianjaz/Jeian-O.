@@ -14,7 +14,8 @@ export const TextAnimator = ({
   interval?: number;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  // isAnimating is used in the animation logic but not directly in rendering
+  const [, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {

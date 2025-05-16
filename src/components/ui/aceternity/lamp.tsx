@@ -28,9 +28,11 @@ export const LampContainer = ({
       mouseY.set(y);
     };
 
-    containerRef.current?.addEventListener("mousemove", handleMouseMove);
+    const currentRef = containerRef.current;
+    
+    currentRef?.addEventListener("mousemove", handleMouseMove);
     return () => {
-      containerRef.current?.removeEventListener("mousemove", handleMouseMove);
+      currentRef?.removeEventListener("mousemove", handleMouseMove);
     };
   }, [mouseX, mouseY]);
 

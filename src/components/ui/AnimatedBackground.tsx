@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useCallback } from "react";
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import type { Container, Engine } from "@tsparticles/engine";
+import type { Engine } from "@tsparticles/engine";
 
 interface AnimatedBackgroundProps {
   variant?: "dots" | "lines" | "minimal" | "wave";
@@ -22,9 +22,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
     await loadSlim(engine);
   }, []);
 
-  const particlesLoaded = useCallback(async (container: Container | undefined) => {
-    // Optional: Do something after particles are loaded
-  }, []);
+  // Removed particlesLoaded callback as it's not being used
 
   // Configuration based on variant
   const getConfig = () => {
@@ -223,7 +221,6 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       <Particles
         id="tsparticles"
         init={particlesInit}
-        loaded={particlesLoaded}
         options={getConfig()}
         className="absolute inset-0"
       />

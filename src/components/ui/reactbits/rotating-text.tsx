@@ -16,8 +16,8 @@ export const RotatingText = ({
   animationType?: "fade" | "slide" | "flip";
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  // isAnimating is used to control the timing of animations
-  const [isAnimating, setIsAnimating] = useState(false);
+  // isAnimating is used in the animation logic but not directly in rendering
+  const [, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {

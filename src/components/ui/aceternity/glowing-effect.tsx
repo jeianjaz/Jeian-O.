@@ -19,7 +19,8 @@ export const GlowingEffect = ({
   glowClassName?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  // Position state is used in updatePosition but not directly referenced elsewhere
+  const [, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
