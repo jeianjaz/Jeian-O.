@@ -23,11 +23,11 @@ export const ClickSparkProvider = ({
       {enableClickSpark && <ClickSpark color="white" size={8} />}
       {enableParticles && (
         <OGLParticles 
-          count={80}
+          count={40} /* Reduced particle count for better performance */
           mouseInteraction={particlesMouseInteraction}
           rotation={true}
           color="#ffffff"
-          className="opacity-70"
+          className="opacity-50" /* Reduced opacity */
         />
       )}
     </>

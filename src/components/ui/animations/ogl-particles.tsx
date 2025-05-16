@@ -27,12 +27,20 @@ export function OGLParticles({
 
   useEffect(() => {
     if (!containerRef.current) return;
+    
+    // Detect if device is mobile for performance optimizations
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      typeof navigator !== 'undefined' ? navigator.userAgent : ''
+    );
+    
+    // Reduce particle count on mobile
+    const actualCount = isMobile ? Math.floor(count / 2) : count;
 
-    // Initialize renderer
+    // Initialize renderer with optimized settings
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
+      dpr: Math.min(window.devicePixelRatio, 1.5), // Reduced DPR for better performance
       alpha: true,
-      antialias: true,
+      antialias: false, // Disable antialiasing for better performance
     });
     rendererRef.current = renderer;
 
@@ -172,17 +180,17 @@ export function OGLParticles({
         particlesRef.current = [];
       }
 
-      // Create geometry for all particles
+      // Create a simple plane geometry for particles - optimized for performance
       const geometry = new Plane(gl, {
-        width: 0.01,
-        height: 0.01,
+        width: 0.05,
+        height: 0.05,
         widthSegments: 1,
         heightSegments: 1,
       });
 
       // Add random attribute for each particle
-      const randomData = new Float32Array(count * 4);
-      for (let i = 0; i < count; i++) {
+      const randomData = new Float32Array(actualCount * 4);
+      for (let i = 0; i < actualCount; i++) {
         // Random values for size, alpha, mouse effect strength, and rotation speed
         randomData[i * 4 + 0] = Math.random(); // Alpha multiplier
         randomData[i * 4 + 1] = Math.random() * 0.8 + 0.2; // Size multiplier
@@ -191,8 +199,8 @@ export function OGLParticles({
       }
       geometry.addAttribute('random', { size: 4, data: randomData });
 
-      // Create and position particles
-      for (let i = 0; i < count; i++) {
+      // Create and position particles - use actualCount for mobile optimization
+      for (let i = 0; i < actualCount; i++) {
         const particle = new Transform();
         
         // Random position in a sphere
@@ -211,19 +219,29 @@ export function OGLParticles({
       }
     };
 
-    // Animation loop
+    // Animation loop with frame throttling for better performance
+    let lastFrameTime = 0;
+    const frameInterval = isMobile ? 1000/30 : 1000/60; // 30fps on mobile, 60fps on desktop
+    
     const animate = (time: number) => {
-      timeRef.current = time * 0.001; // Convert to seconds
+      const now = time;
+      const elapsed = now - lastFrameTime;
       
-      // Update uniforms
-      program.uniforms.uTime.value = timeRef.current;
-      
-      if (mouseInteraction && mouseRef.current) {
-        program.uniforms.uMouse.value = [mouseRef.current.x, mouseRef.current.y];
+      // Only update animation if enough time has passed (frame throttling)
+      if (elapsed > frameInterval) {
+        lastFrameTime = now - (elapsed % frameInterval);
+        timeRef.current = time * 0.001; // Convert to seconds
+        
+        // Update uniforms
+        program.uniforms.uTime.value = timeRef.current;
+        
+        if (mouseInteraction && mouseRef.current) {
+          program.uniforms.uMouse.value = [mouseRef.current.x, mouseRef.current.y];
+        }
+        
+        // Render
+        renderer.render({ scene, camera });
       }
-      
-      // Render
-      renderer.render({ scene, camera });
       
       // Continue animation loop
       animationFrameRef.current = requestAnimationFrame(animate);

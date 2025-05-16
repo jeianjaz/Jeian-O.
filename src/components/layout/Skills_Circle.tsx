@@ -37,7 +37,7 @@ interface Skill {
   initialAngle: number;
 }
 
-// Memoized Skill Icon component for better performance
+// Memoized Skill Icon component with performance optimizations
 const SkillIcon = memo(({ skill, angle, radius }: { skill: Skill; angle: number; radius: number }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -45,6 +45,11 @@ const SkillIcon = memo(({ skill, angle, radius }: { skill: Skill; angle: number;
   const radian = (angle * Math.PI) / 180;
   const x = Math.cos(radian) * radius;
   const y = Math.sin(radian) * radius;
+  
+  // Reduce hover animation complexity on mobile for better performance
+  const isMobile = typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
   
   return (
     <motion.div
@@ -55,7 +60,13 @@ const SkillIcon = memo(({ skill, angle, radius }: { skill: Skill; angle: number;
         zIndex: isHovered ? 50 : 10,
         transform: 'translate(-50%, -50%)',
       }}
-      whileHover={{ scale: 1.15 }}
+      whileHover={{ scale: isMobile ? 1.1 : 1.15 }}
+      transition={{ 
+        type: "spring", 
+        stiffness: isMobile ? 200 : 300, 
+        damping: isMobile ? 20 : 15,
+        duration: isMobile ? 0.3 : 0.2 // Faster transitions on mobile for better performance
+      }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -140,21 +151,35 @@ export default function SkillsCircle() {
     setSkills(allSkills);
   }, []);
   
-  // Animation loop for orbiting motion
+  // Detect if device is mobile for performance optimizations
+  const isMobile = typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+
+  // Animation loop for orbiting motion with performance optimizations
   useEffect(() => {
     let rafId: number;
     let lastTimestamp = 0;
+    
+    // Throttle animation based on device capability
+    // Use 30fps for mobile, 60fps for desktop
+    const frameInterval = isMobile ? 33.33 : 16.67;
+    
+    // Slower rotation speeds on mobile for better performance
+    const rotationSpeeds = isMobile 
+      ? [0.15, -0.12, 0.08]  // Mobile (slower)
+      : [0.25, -0.2, 0.15];  // Desktop (faster)
     
     const animate = (timestamp: number) => {
       if (!lastTimestamp) lastTimestamp = timestamp;
       const deltaTime = timestamp - lastTimestamp;
       
-      // Update angles at a consistent rate (60fps target)
-      if (deltaTime > 16) {
+      // Update angles at a throttled rate based on device
+      if (deltaTime > frameInterval) {
         setOrbitAngles(prev => [
-          (prev[0] + 0.25) % 360,  // First orbit clockwise (faster)
-          (prev[1] - 0.2) % 360,   // Second orbit counter-clockwise (faster)
-          (prev[2] + 0.15) % 360   // Third orbit clockwise (faster)
+          (prev[0] + rotationSpeeds[0]) % 360,  // First orbit clockwise
+          (prev[1] + rotationSpeeds[1]) % 360,  // Second orbit counter-clockwise
+          (prev[2] + rotationSpeeds[2]) % 360   // Third orbit clockwise
         ]);
         lastTimestamp = timestamp;
       }
@@ -164,10 +189,15 @@ export default function SkillsCircle() {
     
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
-  }, []);
+  }, [isMobile]); // Include isMobile in the dependency array
   
-  // Calculate orbit radii
-  const orbitRadii = [160, 240, 320];
+  // Calculate orbit radii - responsive for different screen sizes
+  const baseOrbitRadii = [160, 240, 320];
+  
+  // Scale down orbit radii for mobile devices
+  const orbitRadii = isMobile 
+    ? baseOrbitRadii.map(radius => radius * 0.7) // 30% smaller on mobile
+    : baseOrbitRadii;
   
   return (
     <section id="skills" className="relative min-h-screen w-full overflow-hidden py-20 flex items-center justify-center">

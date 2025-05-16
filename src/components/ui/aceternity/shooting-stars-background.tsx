@@ -39,17 +39,25 @@ const ClientOnlyStars = ({
   // Pre-generate stars for faster initial render
   const [initialized, setInitialized] = useState(false);
   
+  // Detect if device is mobile for performance optimizations
+  const isMobile = typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+  
   // Generate stars immediately on component mount
   useEffect(() => {
     if (initialized) return;
     
+    // Reduce quantity for mobile devices
+    const actualQuantity = isMobile ? Math.floor(quantity * 0.6) : quantity;
+    
     // Generate fixed stars - reduce quantity for better performance
-    const generatedStars = Array.from({ length: quantity * 5 }, (_, i) => ({
+    const generatedStars = Array.from({ length: actualQuantity * 5 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: Math.random() * starSize + 0.1,
-      opacity: Math.random() * 0.8 + 0.2,
+      opacity: Math.random() * 0.7 + 0.3,
     }));
     setStars(generatedStars);
 
@@ -89,7 +97,7 @@ const ClientOnlyStars = ({
     
     rafId = requestAnimationFrame(updateStars);
     return () => cancelAnimationFrame(rafId);
-  }, [quantity, starSize, initialized]);
+  }, [initialized, isMobile, quantity, starSize]);
 
   return (
     <div
