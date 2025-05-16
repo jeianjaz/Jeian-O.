@@ -12,7 +12,7 @@ interface AsteroidProps {
 
 export const Asteroid: React.FC<AsteroidProps> = ({
   className = "",
-  size = 80,
+  size = 40, // Reduced default size from 80 to 40
   position = "bottom-right",
 }) => {
   // Define position classes
@@ -58,7 +58,7 @@ export const Asteroid: React.FC<AsteroidProps> = ({
         alt="Asteroid"
         width={size}
         height={size}
-        className="w-auto h-auto"
+        className="w-auto h-auto opacity-60" // Added opacity to make it less obtrusive
         priority={false}
       />
     </motion.div>
